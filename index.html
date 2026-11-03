@@ -1,157 +1,534 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#142b45">
 <title>Gastportaal</title>
+
 <style>
-:root{--navy:#142b45;--navy2:#1e3c5d;--blue:#2878c8;--light:#eaf1f8;--white:#fff;--muted:#b9c9d9}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#10243a,#1c3c5d);color:#fff}
-body{min-height:100vh;display:grid;place-items:center;padding:24px}
-main{width:min(100%,760px);text-align:center}
-.panel{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:24px;padding:clamp(24px,5vw,48px);box-shadow:0 24px 70px rgba(0,0,0,.22)}
-.symbol{font-size:44px;margin-bottom:10px}
-h1{font-size:clamp(30px,5vw,44px);margin:0 0 8px;font-weight:700}
-.subtitle{color:var(--muted);margin:0 0 28px;font-size:17px}
-input{width:100%;max-width:430px;padding:16px 18px;border:0;border-radius:12px;font-size:18px;text-align:center;outline:3px solid transparent}
-input:focus{outline-color:#7eb8f1}
-button,.tile{border:0;cursor:pointer;font:inherit}
-.primary{display:block;width:100%;max-width:430px;margin:14px auto 0;background:var(--blue);color:white;padding:16px;border-radius:12px;font-size:17px;font-weight:700}
-.primary:hover,.tile:hover{filter:brightness(1.08);transform:translateY(-2px)}
-.error{min-height:24px;color:#ffd1d1;margin:12px 0 0}
-.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
-.tile{background:#fff;color:var(--navy);border-radius:18px;padding:30px 18px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:.15s}
-.tile .ico{font-size:42px}
-.tile strong{font-size:21px}
-.tile span:last-child{font-size:14px;color:#5c6c7c}
-.hidden{display:none!important}
-footer{color:#9fb2c5;font-size:12px;margin-top:22px}
-.admin-link{position:fixed;right:16px;bottom:14px;background:transparent;color:#8fa6bc;border:0;font-size:12px;padding:8px}
-.admin-link:hover{color:white}
-.small-note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:18px}
-.secondary{background:#e7edf4;color:#18314b;border:0;border-radius:10px;padding:12px 18px;font-weight:600;margin:8px}
-@media(max-width:520px){.choices{grid-template-columns:1fr}.tile{min-height:125px;padding:20px}.panel{padding:26px 18px}}
+:root {
+  --navy: #142b45;
+  --blue: #2878c8;
+  --white: #ffffff;
+  --muted: #b9c9d9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #10243a, #1c3c5d);
+  color: white;
+}
+
+main {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+}
+
+.panel {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.22);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.symbol {
+  font-size: 46px;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: 40px;
+  margin: 0 0 10px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+input {
+  width: 100%;
+  max-width: 430px;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: .2s;
+}
+
+button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.primary {
+  display: block;
+  width: 100%;
+  max-width: 430px;
+  margin: 14px auto;
+  padding: 16px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.error {
+  color: #ffd1d1;
+  min-height: 24px;
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin: 28px 0;
+}
+
+.tile {
+  background: white;
+  color: var(--navy);
+  border: none;
+  border-radius: 18px;
+  padding: 30px 15px;
+  min-height: 165px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tile .ico {
+  font-size: 42px;
+}
+
+.tile strong {
+  font-size: 22px;
+}
+
+.tile span:last-child {
+  color: #607080;
+  font-size: 14px;
+}
+
+.secondary {
+  background: #e7edf4;
+  color: #18314b;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-weight: bold;
+  margin: 8px;
+}
+
+footer {
+  color: #9fb2c5;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+.admin-link {
+  position: fixed;
+  right: 15px;
+  bottom: 12px;
+  background: transparent;
+  border: none;
+  color: #9fb2c5;
+  font-size: 12px;
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 15px 0;
+}
+
+@media(max-width:520px) {
+  .panel {
+    padding: 25px 18px;
+  }
+
+  .choices {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <main>
-  <section class="panel" id="loginView">
-    <div class="symbol">👋</div>
-    <h1>Welkom!</h1>
-    <p class="subtitle">Welkom in het gastaccount.<br>Vul het wachtwoord in om verder te gaan.</p>
-    <form id="loginForm">
-      <input id="guestPassword" type="password" placeholder="Wachtwoord" autocomplete="current-password" autofocus required>
-      <button class="primary" type="submit">Ontgrendelen</button>
-      <p class="error" id="loginError" aria-live="polite"></p>
-    </form>
-    <footer>Gastportaal</footer>
-  </section>
 
-  <section class="panel hidden" id="choicesView">
-    <div class="symbol">🖥️</div>
-    <h1>Gastportaal</h1>
-    <p class="subtitle">Wat wilt u openen?</p>
-    <div class="choices">
-      <button class="tile" id="googleButton" type="button">
-        <span class="ico">🌐</span><strong>Google</strong><span>Google zoeken</span>
-      </button>
-      <button class="tile" id="edgeButton" type="button">
-        <span class="ico">ⓔ</span><strong>Edge</strong><span>Microsoft-startpagina</span>
-      </button>
-    </div>
-    <button class="secondary" id="backButton" type="button">Terug naar wachtwoordscherm</button>
-    <footer>Gastportaal</footer>
-  </section>
+<!-- WACHTWOORDSCHERM -->
+<section class="panel" id="loginView">
 
-  <section class="panel hidden" id="adminView">
-    <div class="symbol">⚙️</div>
-    <h1>Beheer</h1>
-    <p class="subtitle">Wachtwoord wijzigen</p>
-    <form id="adminForm">
-      <input id="adminPassword" type="password" placeholder="Beheerderswachtwoord" autocomplete="current-password" required>
-      <button class="primary" type="submit">Verder</button>
-      <p class="error" id="adminError" aria-live="polite"></p>
-    </form>
-    <div id="changeArea" class="hidden">
-      <p class="small-note">Kies een nieuw wachtwoord voor het gastportaal.</p>
-      <input id="newPassword" type="password" placeholder="Nieuw gastwachtwoord" autocomplete="new-password">
-      <input id="confirmPassword" type="password" placeholder="Nieuw wachtwoord herhalen" autocomplete="new-password" style="margin-top:10px">
-      <button class="primary" id="savePassword" type="button">Wachtwoord opslaan</button>
-      <p class="error" id="changeError" aria-live="polite"></p>
-    </div>
-    <button class="secondary" id="cancelAdmin" type="button">Terug</button>
-    <footer>Beheer gastportaal</footer>
-  </section>
+  <div class="symbol">👋</div>
+
+  <h1>Welkom!</h1>
+
+  <p class="subtitle">
+    Welkom in het gastaccount.<br>
+    Vul het wachtwoord in om verder te gaan.
+  </p>
+
+  <form id="loginForm">
+
+    <input
+      id="guestPassword"
+      type="password"
+      placeholder="Wachtwoord"
+      autocomplete="off"
+      required
+    >
+
+    <button class="primary" type="submit">
+      Ontgrendelen
+    </button>
+
+    <p class="error" id="loginError"></p>
+
+  </form>
+
+  <footer>Gastportaal</footer>
+
+</section>
+
+
+<!-- KEUZESCHERM -->
+<section class="panel hidden" id="choicesView">
+
+  <div class="symbol">🖥️</div>
+
+  <h1>Gastportaal</h1>
+
+  <p class="subtitle">
+    Kies wat je wilt openen.
+  </p>
+
+  <div class="choices">
+
+    <button class="tile" id="googleButton" type="button">
+      <span class="ico">🌐</span>
+      <strong>Google</strong>
+      <span>Google openen</span>
+    </button>
+
+    <button class="tile" id="edgeButton" type="button">
+      <span class="ico">ⓔ</span>
+      <strong>Edge</strong>
+      <span>Internet openen</span>
+    </button>
+
+  </div>
+
+  <p class="small-note">
+    Het gastportaal blijft geopend in het oorspronkelijke tabblad.
+    Gebruik Ctrl + Shift + Tab om naar het vorige tabblad terug te gaan,
+    als Edge dit in de kioskmodus toestaat.
+  </p>
+
+  <button class="secondary" id="backButton" type="button">
+    ← Terug naar beginscherm
+  </button>
+
+  <footer>Gastportaal</footer>
+
+</section>
+
+
+<!-- BEHEERSCHERM -->
+<section class="panel hidden" id="adminView">
+
+  <div class="symbol">⚙️</div>
+
+  <h1>Beheer</h1>
+
+  <p class="subtitle">Wachtwoord wijzigen</p>
+
+  <form id="adminForm">
+
+    <input
+      id="adminPassword"
+      type="password"
+      placeholder="Beheerderswachtwoord"
+      required
+    >
+
+    <button class="primary" type="submit">
+      Verder
+    </button>
+
+    <p class="error" id="adminError"></p>
+
+  </form>
+
+  <div id="changeArea" class="hidden">
+
+    <p class="small-note">
+      Vul hieronder je nieuwe gastwachtwoord in.
+    </p>
+
+    <input
+      id="newPassword"
+      type="password"
+      placeholder="Nieuw wachtwoord"
+    >
+
+    <br><br>
+
+    <input
+      id="confirmPassword"
+      type="password"
+      placeholder="Wachtwoord herhalen"
+    >
+
+    <button class="primary" id="savePassword" type="button">
+      Wachtwoord opslaan
+    </button>
+
+    <p class="error" id="changeError"></p>
+
+  </div>
+
+  <button class="secondary" id="cancelAdmin" type="button">
+    Terug
+  </button>
+
+  <footer>Beheer gastportaal</footer>
+
+</section>
+
 </main>
-<button class="admin-link" id="adminLink" type="button">Beheer</button>
+
+<button class="admin-link" id="adminLink" type="button">
+  Beheer
+</button>
+
+
 <script>
-(() => {
-  // Startwachtwoorden. Wijzig deze eventueel vóór publicatie.
-  const DEFAULT_GUEST_PASSWORD = "Gast1234";
-  const ADMIN_PASSWORD = "Beheer123";
-  const GUEST_KEY = "gastportaal_guest_password_v1";
 
-  const $ = id => document.getElementById(id);
-  const views = ["loginView","choicesView","adminView"];
-  function show(id) {
-    views.forEach(v => $(v).classList.toggle("hidden", v !== id));
-    if (id === "loginView") $("guestPassword").focus();
-  }
-  function getGuestPassword() {
-    return localStorage.getItem(GUEST_KEY) || DEFAULT_GUEST_PASSWORD;
-  }
+// ===================================
+// INSTELLINGEN
+// ===================================
 
-  $("loginForm").addEventListener("submit", e => {
-    e.preventDefault();
-    if ($("guestPassword").value === getGuestPassword()) {
-      $("loginError").textContent = "";
-      $("guestPassword").value = "";
-      show("choicesView");
-    } else {
-      $("loginError").textContent = "Dit wachtwoord is niet juist. Probeer het opnieuw.";
-      $("guestPassword").select();
-    }
+const DEFAULT_GUEST_PASSWORD = "Gast1234";
+const ADMIN_PASSWORD = "Beheer123";
+
+const GUEST_KEY = "gastportaal_guest_password_v1";
+
+
+// ===================================
+// SCHERMEN WISSELEN
+// ===================================
+
+const $ = id => document.getElementById(id);
+
+function showView(id) {
+
+  ["loginView", "choicesView", "adminView"].forEach(view => {
+    $(view).classList.toggle("hidden", view !== id);
   });
 
-  // Navigatie blijft in hetzelfde kioskvenster.
-  $("googleButton").addEventListener("click", () => location.href = "https://www.google.nl/");
-  $("edgeButton").addEventListener("click", () => location.href = "https://www.msn.com/nl-nl/");
+  if (id === "loginView") {
+    $("guestPassword").focus();
+  }
+}
 
-  $("backButton").addEventListener("click", () => show("loginView"));
-  $("adminLink").addEventListener("click", () => {
-    $("adminPassword").value = "";
+
+// ===================================
+// WACHTWOORD CONTROLEREN
+// ===================================
+
+function getGuestPassword() {
+
+  return localStorage.getItem(GUEST_KEY)
+    || DEFAULT_GUEST_PASSWORD;
+
+}
+
+$("loginForm").addEventListener("submit", function(e) {
+
+  e.preventDefault();
+
+  if ($("guestPassword").value === getGuestPassword()) {
+
+    $("loginError").textContent = "";
+    $("guestPassword").value = "";
+
+    showView("choicesView");
+
+  } else {
+
+    $("loginError").textContent =
+      "Onjuist wachtwoord. Probeer het opnieuw.";
+
+    $("guestPassword").select();
+
+  }
+
+});
+
+
+// ===================================
+// GOOGLE OPENEN
+// ===================================
+
+$("googleButton").addEventListener("click", function() {
+
+  window.open(
+    "https://www.google.nl/",
+    "_blank"
+  );
+
+});
+
+
+// ===================================
+// EDGE / INTERNET OPENEN
+// ===================================
+
+$("edgeButton").addEventListener("click", function() {
+
+  window.open(
+    "https://www.msn.com/nl-nl/",
+    "_blank"
+  );
+
+});
+
+
+// ===================================
+// TERUG NAAR BEGIN
+// ===================================
+
+$("backButton").addEventListener("click", function() {
+
+  showView("loginView");
+
+});
+
+
+// ===================================
+// BEHEER OPENEN
+// ===================================
+
+$("adminLink").addEventListener("click", function() {
+
+  $("adminPassword").value = "";
+  $("adminError").textContent = "";
+  $("changeArea").classList.add("hidden");
+
+  showView("adminView");
+
+});
+
+
+// ===================================
+// BEHEERDER CONTROLEREN
+// ===================================
+
+$("adminForm").addEventListener("submit", function(e) {
+
+  e.preventDefault();
+
+  if ($("adminPassword").value === ADMIN_PASSWORD) {
+
     $("adminError").textContent = "";
-    $("changeArea").classList.add("hidden");
-    show("adminView");
-  });
-  $("adminForm").addEventListener("submit", e => {
-    e.preventDefault();
-    if ($("adminPassword").value === ADMIN_PASSWORD) {
-      $("adminError").textContent = "";
-      $("changeArea").classList.remove("hidden");
-      $("newPassword").focus();
-    } else {
-      $("adminError").textContent = "Onjuist beheerderswachtwoord.";
-    }
-  });
-  $("savePassword").addEventListener("click", () => {
-    const p = $("newPassword").value;
-    const c = $("confirmPassword").value;
-    if (p.length < 4) {
-      $("changeError").textContent = "Gebruik minimaal 4 tekens.";
-    } else if (p !== c) {
-      $("changeError").textContent = "De wachtwoorden komen niet overeen.";
-    } else {
-      localStorage.setItem(GUEST_KEY, p);
-      $("changeError").textContent = "Het nieuwe gastwachtwoord is opgeslagen op deze laptop.";
-      $("newPassword").value = "";
-      $("confirmPassword").value = "";
-    }
-  });
-  $("cancelAdmin").addEventListener("click", () => show("loginView"));
-})();
+    $("changeArea").classList.remove("hidden");
+
+    $("newPassword").focus();
+
+  } else {
+
+    $("adminError").textContent =
+      "Onjuist beheerderswachtwoord.";
+
+  }
+
+});
+
+
+// ===================================
+// NIEUW WACHTWOORD OPSLAAN
+// ===================================
+
+$("savePassword").addEventListener("click", function() {
+
+  const password = $("newPassword").value;
+  const confirmation = $("confirmPassword").value;
+
+  if (password.length < 4) {
+
+    $("changeError").textContent =
+      "Gebruik minimaal 4 tekens.";
+
+    return;
+
+  }
+
+  if (password !== confirmation) {
+
+    $("changeError").textContent =
+      "De wachtwoorden komen niet overeen.";
+
+    return;
+
+  }
+
+  localStorage.setItem(GUEST_KEY, password);
+
+  $("changeError").textContent =
+    "Het nieuwe wachtwoord is opgeslagen!";
+
+  $("newPassword").value = "";
+  $("confirmPassword").value = "";
+
+});
+
+
+// ===================================
+// BEHEER TERUG
+// ===================================
+
+$("cancelAdmin").addEventListener("click", function() {
+
+  showView("loginView");
+
+});
+
 </script>
+
 </body>
 </html>
