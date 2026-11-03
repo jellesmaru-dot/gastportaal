@@ -1,534 +1,325 @@
+from pathlib import Path
+import zipfile
 
-<!DOCTYPE html>
+base = Path("/mnt/data/gastportaal_compleet")
+base.mkdir(exist_ok=True)
+
+html = r'''<!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142b45">
 <title>Gastportaal</title>
-
 <style>
-:root {
-  --navy: #142b45;
-  --blue: #2878c8;
-  --white: #ffffff;
-  --muted: #b9c9d9;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #10243a, #1c3c5d);
-  color: white;
-}
-
-main {
-  width: 100%;
-  max-width: 760px;
-  text-align: center;
-}
-
-.panel {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 24px;
-  padding: 40px;
-  box-shadow: 0 24px 70px rgba(0,0,0,.22);
-}
-
-.hidden {
-  display: none !important;
-}
-
-.symbol {
-  font-size: 46px;
-  margin-bottom: 12px;
-}
-
-h1 {
-  font-size: 40px;
-  margin: 0 0 10px;
-}
-
-.subtitle {
-  color: var(--muted);
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-
-input {
-  width: 100%;
-  max-width: 430px;
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  text-align: center;
-}
-
-button {
-  cursor: pointer;
-  font-family: inherit;
-  transition: .2s;
-}
-
-button:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
-}
-
-.primary {
-  display: block;
-  width: 100%;
-  max-width: 430px;
-  margin: 14px auto;
-  padding: 16px;
-  background: var(--blue);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-.error {
-  color: #ffd1d1;
-  min-height: 24px;
-}
-
-.choices {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  margin: 28px 0;
-}
-
-.tile {
-  background: white;
-  color: var(--navy);
-  border: none;
-  border-radius: 18px;
-  padding: 30px 15px;
-  min-height: 165px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.tile .ico {
-  font-size: 42px;
-}
-
-.tile strong {
-  font-size: 22px;
-}
-
-.tile span:last-child {
-  color: #607080;
-  font-size: 14px;
-}
-
-.secondary {
-  background: #e7edf4;
-  color: #18314b;
-  border: none;
-  border-radius: 10px;
-  padding: 13px 20px;
-  font-weight: bold;
-  margin: 8px;
-}
-
-footer {
-  color: #9fb2c5;
-  font-size: 12px;
-  margin-top: 20px;
-}
-
-.admin-link {
-  position: fixed;
-  right: 15px;
-  bottom: 12px;
-  background: transparent;
-  border: none;
-  color: #9fb2c5;
-  font-size: 12px;
-}
-
-.small-note {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
-  margin: 15px 0;
-}
-
-@media(max-width:520px) {
-  .panel {
-    padding: 25px 18px;
-  }
-
-  .choices {
-    grid-template-columns: 1fr;
-  }
-
-  h1 {
-    font-size: 32px;
-  }
-}
+:root{--navy:#142b45;--navy2:#1e3c5d;--blue:#2878c8;--white:#fff;--muted:#b9c9d9;--soft:#eaf1f8}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Segoe UI",Arial,sans-serif}
+body{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#10243a,#1c3c5d);color:#fff}
+main{width:min(100%,820px);margin:auto}
+.panel{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:clamp(24px,5vw,44px);box-shadow:0 24px 70px rgba(0,0,0,.22);text-align:center}
+.hidden{display:none!important}
+.symbol{font-size:44px;margin-bottom:10px}
+h1{font-size:clamp(30px,5vw,42px);margin:0 0 8px}
+h2{font-size:23px;margin:0 0 10px}
+.subtitle{color:var(--muted);line-height:1.55;margin:0 0 26px}
+input{width:100%;max-width:440px;padding:16px 18px;border:0;border-radius:12px;font-size:17px;text-align:center;outline:3px solid transparent;margin:5px 0}
+input:focus{outline-color:#82bdf5}
+.primary{display:block;width:100%;max-width:440px;margin:13px auto 0;padding:16px;background:var(--blue);color:white;border:0;border-radius:12px;font-size:17px;font-weight:700}
+button{font-family:inherit;cursor:pointer;transition:transform .15s,filter .15s}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.error{color:#ffd1d1;min-height:22px;margin:10px 0 0}
+.clock{font-size:clamp(42px,8vw,70px);font-weight:300;letter-spacing:2px;font-variant-numeric:tabular-nums;margin:4px 0}
+.date{font-size:17px;color:var(--muted);margin-bottom:24px;text-transform:capitalize}
+.hello{font-size:clamp(27px,4vw,36px);margin:0 0 8px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:26px 0 20px}
+.tile{background:#fff;color:var(--navy);border:0;border-radius:18px;padding:27px 16px;min-height:165px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
+.tile .ico{font-size:42px}.tile strong{font-size:22px}.tile small{font-size:14px;color:#607080}
+.info-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:18px 0}
+.info-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:9px 14px;color:#e6eff8;font-size:13px}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:20px}
+.secondary{background:#e7edf4;color:#18314b;border:0;border-radius:10px;padding:12px 18px;font-weight:650}
+.danger{background:#8c3540;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:650}
+footer{color:#9fb2c5;font-size:12px;margin-top:22px}
+.admin-link{position:fixed;right:14px;bottom:12px;background:transparent;color:#9fb2c5;border:0;font-size:12px;padding:8px}
+.small-note{font-size:13px;color:var(--muted);line-height:1.5;margin:14px auto;max-width:520px}
+.status{color:#bfe5c8;min-height:22px;font-size:14px}
+@media(max-width:520px){.choices{grid-template-columns:1fr}.tile{min-height:125px;padding:20px}.panel{padding:25px 18px}.clock{font-size:48px}}
 </style>
 </head>
-
 <body>
-
 <main>
 
-<!-- WACHTWOORDSCHERM -->
+<!-- INLOGSCHERM -->
 <section class="panel" id="loginView">
-
   <div class="symbol">👋</div>
-
   <h1>Welkom!</h1>
-
-  <p class="subtitle">
-    Welkom in het gastaccount.<br>
-    Vul het wachtwoord in om verder te gaan.
-  </p>
-
+  <p class="subtitle">Welkom in het gastaccount.<br>Vul je naam en het wachtwoord in om verder te gaan.</p>
   <form id="loginForm">
-
-    <input
-      id="guestPassword"
-      type="password"
-      placeholder="Wachtwoord"
-      autocomplete="off"
-      required
-    >
-
-    <button class="primary" type="submit">
-      Ontgrendelen
-    </button>
-
-    <p class="error" id="loginError"></p>
-
+    <input id="guestName" type="text" maxlength="40" placeholder="Wat is je naam?" autocomplete="off" required>
+    <input id="guestPassword" type="password" placeholder="Wachtwoord" autocomplete="off" required>
+    <button class="primary" type="submit">Inloggen →</button>
+    <p class="error" id="loginError" aria-live="polite"></p>
   </form>
-
   <footer>Gastportaal</footer>
-
 </section>
 
-
-<!-- KEUZESCHERM -->
-<section class="panel hidden" id="choicesView">
-
-  <div class="symbol">🖥️</div>
-
-  <h1>Gastportaal</h1>
-
-  <p class="subtitle">
-    Kies wat je wilt openen.
-  </p>
+<!-- STARTPAGINA -->
+<section class="panel hidden" id="homeView">
+  <div class="clock" id="clock">--:--:--</div>
+  <div class="date" id="date"></div>
+  <h1 class="hello" id="hello">Hallo!</h1>
+  <p class="subtitle">Fijn dat je gebruikmaakt van het gastaccount.</p>
 
   <div class="choices">
-
     <button class="tile" id="googleButton" type="button">
-      <span class="ico">🌐</span>
-      <strong>Google</strong>
-      <span>Google openen</span>
+      <span class="ico">🌐</span><strong>Google</strong><small>Zoeken op internet</small>
     </button>
-
     <button class="tile" id="edgeButton" type="button">
-      <span class="ico">ⓔ</span>
-      <strong>Edge</strong>
-      <span>Internet openen</span>
+      <span class="ico">ⓔ</span><strong>Edge</strong><small>Microsoft-startpagina</small>
     </button>
-
   </div>
 
-  <p class="small-note">
-    Het gastportaal blijft geopend in het oorspronkelijke tabblad.
-    Gebruik Ctrl + Shift + Tab om naar het vorige tabblad terug te gaan,
-    als Edge dit in de kioskmodus toestaat.
-  </p>
+  <div class="info-row">
+    <div class="info-pill">👤 Ingelogd als <strong id="activeName"></strong></div>
+    <div class="info-pill">⏱️ Sessie: <strong id="sessionDuration">00:00:00</strong></div>
+  </div>
 
-  <button class="secondary" id="backButton" type="button">
-    ← Terug naar beginscherm
-  </button>
+  <p class="small-note">Het gastportaal blijft in dit tabblad open. Gebruik de tabbladknoppen van Edge om terug te keren nadat je een website in een nieuw tabblad hebt geopend.</p>
 
+  <div class="actions">
+    <button class="secondary" id="lockButton" type="button">🔒 Vergrendelen</button>
+    <button class="danger" id="logoutButton" type="button">Uitloggen</button>
+  </div>
   <footer>Gastportaal</footer>
-
 </section>
 
-
-<!-- BEHEERSCHERM -->
+<!-- BEHEER -->
 <section class="panel hidden" id="adminView">
-
   <div class="symbol">⚙️</div>
-
   <h1>Beheer</h1>
-
-  <p class="subtitle">Wachtwoord wijzigen</p>
+  <p class="subtitle">Instellingen van het gastportaal</p>
 
   <form id="adminForm">
-
-    <input
-      id="adminPassword"
-      type="password"
-      placeholder="Beheerderswachtwoord"
-      required
-    >
-
-    <button class="primary" type="submit">
-      Verder
-    </button>
-
-    <p class="error" id="adminError"></p>
-
+    <input id="adminPassword" type="password" placeholder="Beheerderswachtwoord" autocomplete="off" required>
+    <button class="primary" type="submit">Inloggen bij beheer</button>
+    <p class="error" id="adminError" aria-live="polite"></p>
   </form>
 
-  <div id="changeArea" class="hidden">
-
-    <p class="small-note">
-      Vul hieronder je nieuwe gastwachtwoord in.
-    </p>
-
-    <input
-      id="newPassword"
-      type="password"
-      placeholder="Nieuw wachtwoord"
-    >
-
-    <br><br>
-
-    <input
-      id="confirmPassword"
-      type="password"
-      placeholder="Wachtwoord herhalen"
-    >
-
-    <button class="primary" id="savePassword" type="button">
-      Wachtwoord opslaan
-    </button>
-
-    <p class="error" id="changeError"></p>
-
+  <div id="adminArea" class="hidden">
+    <h2>Gastwachtwoord wijzigen</h2>
+    <p class="small-note">Kies een nieuw wachtwoord. Je moet dit daarna gebruiken om als gast in te loggen.</p>
+    <input id="newPassword" type="password" placeholder="Nieuw gastwachtwoord" autocomplete="new-password">
+    <input id="confirmPassword" type="password" placeholder="Nieuw wachtwoord herhalen" autocomplete="new-password">
+    <button class="primary" id="savePassword" type="button">Wachtwoord opslaan</button>
+    <p class="status" id="changeStatus" aria-live="polite"></p>
+    <p class="small-note">De beheerderscode staat apart in de websitecode en kan daar door jou worden aangepast.</p>
   </div>
 
-  <button class="secondary" id="cancelAdmin" type="button">
-    Terug
-  </button>
-
+  <div class="actions">
+    <button class="secondary" id="adminBack" type="button">Terug</button>
+  </div>
   <footer>Beheer gastportaal</footer>
-
 </section>
 
 </main>
 
-<button class="admin-link" id="adminLink" type="button">
-  Beheer
-</button>
-
+<button class="admin-link" id="adminLink" type="button">Beheer</button>
 
 <script>
-
-// ===================================
-// INSTELLINGEN
-// ===================================
-
+/* =========================================
+   INSTELLINGEN
+   Pas deze twee codes eventueel zelf aan.
+   ========================================= */
 const DEFAULT_GUEST_PASSWORD = "Gast1234";
 const ADMIN_PASSWORD = "Beheer123";
-
 const GUEST_KEY = "gastportaal_guest_password_v1";
 
-
-// ===================================
-// SCHERMEN WISSELEN
-// ===================================
-
 const $ = id => document.getElementById(id);
+let currentName = "";
+let sessionStartedAt = null;
+let clockTimer = null;
 
-function showView(id) {
-
-  ["loginView", "choicesView", "adminView"].forEach(view => {
-    $(view).classList.toggle("hidden", view !== id);
+function showView(viewId) {
+  ["loginView", "homeView", "adminView"].forEach(id => {
+    $(id).classList.toggle("hidden", id !== viewId);
   });
-
-  if (id === "loginView") {
-    $("guestPassword").focus();
-  }
+  $("adminLink").classList.toggle("hidden", viewId === "adminView");
+  if (viewId === "loginView") $("guestName").focus();
 }
-
-
-// ===================================
-// WACHTWOORD CONTROLEREN
-// ===================================
 
 function getGuestPassword() {
-
-  return localStorage.getItem(GUEST_KEY)
-    || DEFAULT_GUEST_PASSWORD;
-
+  return localStorage.getItem(GUEST_KEY) || DEFAULT_GUEST_PASSWORD;
 }
 
-$("loginForm").addEventListener("submit", function(e) {
+/* Klok, datum en sessieduur */
+function updateDashboard() {
+  const now = new Date();
+  $("clock").textContent = now.toLocaleTimeString("nl-NL", {
+    hour: "2-digit", minute: "2-digit", second: "2-digit"
+  });
+  $("date").textContent = now.toLocaleDateString("nl-NL", {
+    weekday: "long", day: "numeric", month: "long", year: "numeric"
+  });
 
-  e.preventDefault();
+  if (sessionStartedAt) {
+    const seconds = Math.floor((Date.now() - sessionStartedAt) / 1000);
+    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
+    $("sessionDuration").textContent = `${h}:${m}:${s}`;
+  }
+}
 
-  if ($("guestPassword").value === getGuestPassword()) {
+function startDashboard() {
+  if (clockTimer) clearInterval(clockTimer);
+  updateDashboard();
+  clockTimer = setInterval(updateDashboard, 1000);
+}
 
-    $("loginError").textContent = "";
-    $("guestPassword").value = "";
+function clearSession() {
+  currentName = "";
+  sessionStartedAt = null;
+  if (clockTimer) {
+    clearInterval(clockTimer);
+    clockTimer = null;
+  }
+  $("guestName").value = "";
+  $("guestPassword").value = "";
+  $("loginError").textContent = "";
+  showView("loginView");
+}
 
-    showView("choicesView");
+/* Inloggen: naam is iedere keer verplicht */
+$("loginForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = $("guestName").value.trim();
+  const password = $("guestPassword").value;
 
-  } else {
-
-    $("loginError").textContent =
-      "Onjuist wachtwoord. Probeer het opnieuw.";
-
-    $("guestPassword").select();
-
+  if (!name) {
+    $("loginError").textContent = "Vul eerst je naam in.";
+    return;
   }
 
+  if (password !== getGuestPassword()) {
+    $("loginError").textContent = "Het wachtwoord is niet juist. Probeer het opnieuw.";
+    $("guestPassword").select();
+    return;
+  }
+
+  currentName = name;
+  sessionStartedAt = Date.now();
+  $("hello").textContent = `Hallo, ${currentName}! 👋`;
+  $("activeName").textContent = currentName;
+  $("loginError").textContent = "";
+  $("guestPassword").value = "";
+  showView("homeView");
+  startDashboard();
 });
 
-
-// ===================================
-// GOOGLE OPENEN
-// ===================================
-
-$("googleButton").addEventListener("click", function() {
-
-  window.open(
-    "https://www.google.nl/",
-    "_blank"
-  );
-
+/* Websites openen in nieuw tabblad; het portaal blijft open.
+   Let op: Edge Fullscreen-kiosk kan nieuwe tabbladen blokkeren. */
+$("googleButton").addEventListener("click", () => {
+  window.open("https://www.google.nl/", "_blank", "noopener");
+});
+$("edgeButton").addEventListener("click", () => {
+  window.open("https://www.msn.com/nl-nl/", "_blank", "noopener");
 });
 
+/* Vergrendelen: terug naar wachtwoordscherm.
+   De sessiegegevens worden beëindigd. */
+$("lockButton").addEventListener("click", clearSession);
 
-// ===================================
-// EDGE / INTERNET OPENEN
-// ===================================
+/* Uitloggen: zelfde veilige terugkeer als vergrendelen. */
+$("logoutButton").addEventListener("click", clearSession);
 
-$("edgeButton").addEventListener("click", function() {
-
-  window.open(
-    "https://www.msn.com/nl-nl/",
-    "_blank"
-  );
-
-});
-
-
-// ===================================
-// TERUG NAAR BEGIN
-// ===================================
-
-$("backButton").addEventListener("click", function() {
-
-  showView("loginView");
-
-});
-
-
-// ===================================
-// BEHEER OPENEN
-// ===================================
-
-$("adminLink").addEventListener("click", function() {
-
+/* Beheer */
+$("adminLink").addEventListener("click", () => {
   $("adminPassword").value = "";
   $("adminError").textContent = "";
-  $("changeArea").classList.add("hidden");
-
+  $("adminArea").classList.add("hidden");
+  $("changeStatus").textContent = "";
   showView("adminView");
-
 });
 
-
-// ===================================
-// BEHEERDER CONTROLEREN
-// ===================================
-
-$("adminForm").addEventListener("submit", function(e) {
-
-  e.preventDefault();
-
+$("adminForm").addEventListener("submit", event => {
+  event.preventDefault();
   if ($("adminPassword").value === ADMIN_PASSWORD) {
-
     $("adminError").textContent = "";
-    $("changeArea").classList.remove("hidden");
-
-    $("newPassword").focus();
-
+    $("adminArea").classList.remove("hidden");
+    $("adminPassword").value = "";
   } else {
-
-    $("adminError").textContent =
-      "Onjuist beheerderswachtwoord.";
-
+    $("adminError").textContent = "Onjuist beheerderswachtwoord.";
   }
-
 });
 
-
-// ===================================
-// NIEUW WACHTWOORD OPSLAAN
-// ===================================
-
-$("savePassword").addEventListener("click", function() {
-
+$("savePassword").addEventListener("click", () => {
   const password = $("newPassword").value;
   const confirmation = $("confirmPassword").value;
 
   if (password.length < 4) {
-
-    $("changeError").textContent =
-      "Gebruik minimaal 4 tekens.";
-
+    $("changeStatus").textContent = "Gebruik minimaal 4 tekens.";
     return;
-
   }
-
   if (password !== confirmation) {
-
-    $("changeError").textContent =
-      "De wachtwoorden komen niet overeen.";
-
+    $("changeStatus").textContent = "De wachtwoorden komen niet overeen.";
     return;
-
   }
 
   localStorage.setItem(GUEST_KEY, password);
-
-  $("changeError").textContent =
-    "Het nieuwe wachtwoord is opgeslagen!";
-
   $("newPassword").value = "";
   $("confirmPassword").value = "";
-
+  $("changeStatus").textContent = "Het nieuwe gastwachtwoord is opgeslagen.";
 });
 
-
-// ===================================
-// BEHEER TERUG
-// ===================================
-
-$("cancelAdmin").addEventListener("click", function() {
-
-  showView("loginView");
-
+$("adminBack").addEventListener("click", () => {
+  if (currentName) showView("homeView");
+  else showView("loginView");
 });
-
 </script>
-
 </body>
 </html>
+'''
+
+readme = """GASTPORTAAL – COMPLETE VERSIE
+
+Inhoud:
+- index.html: complete website in één bestand.
+
+Standaardcodes:
+- Gastwachtwoord: Gast1234
+- Beheerderswachtwoord: Beheer123
+
+Functies:
+- Naam en wachtwoord iedere keer verplicht invullen.
+- Persoonlijke begroeting.
+- Live klok en datum.
+- Sessieduur.
+- Google en Microsoft-startpagina openen in nieuw tabblad.
+- Vergrendelen en uitloggen.
+- Beheerpagina om gastwachtwoord te wijzigen.
+
+Installatie:
+1. Open je GitHub-repository gastportaal.
+2. Open index.html en klik op het potloodje (Edit).
+3. Vervang alle inhoud door de inhoud van index.html uit dit pakket.
+4. Klik op Commit changes.
+5. Wacht tot GitHub Pages de wijziging heeft gepubliceerd.
+
+Website:
+https://jellesmaru-dot.github.io/gastportaal/
+
+BELANGRIJKE BEPERKINGEN EN BEVEILIGING:
+- Dit is een statische website. Wachtwoordcontrole in HTML/JavaScript is niet veilig tegen iemand die de broncode bekijkt. Gebruik dit niet voor vertrouwelijke gegevens.
+- Het gastwachtwoord wordt in localStorage van de browser opgeslagen. Als browsergegevens worden gewist of het kioskprofiel wordt gereset, kan de wijziging verloren gaan en geldt weer Gast1234.
+- De beheerderscode staat in de openbare broncode en is dus geen echte geheime beheerdersbeveiliging.
+- Google en MSN worden met window.open in een nieuw tabblad geopend. Windows Edge Fullscreen-kiosk kan pop-ups/nieuwe tabbladen blokkeren. Als dat gebeurt, moet de kioskmodus of browserconfiguratie worden aangepast.
+- Een gewone webpagina kan geen tabbladbalk of browserknoppen bovenop andere websites tonen.
+"""
+(base / "index.html").write_text(html, encoding="utf-8")
+(base / "LEESMIJ.txt").write_text(readme, encoding="utf-8")
+zip_path = Path("/mnt/data/gastportaal-compleet.zip")
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    z.write(base / "index.html", "gastportaal/index.html")
+    z.write(base / "LEESMIJ.txt", "gastportaal/LEESMIJ.txt")
+print("Bestanden aangemaakt:", zip_path, base / "index.html")
