@@ -3,338 +3,456 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gastportaal</title>
 
 <style>
 :root {
-  --navy: #142b45;
-  --blue: #2878c8;
-  --white: #ffffff;
-  --muted: #b9c9d9;
+    --navy: #101d38;
+    --blue: #2878e5;
+    --light: #f4f7fc;
+    --ink: #17233b;
+    --muted: #66748b;
+    --white: #ffffff;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #10243a, #1c3c5d);
-  color: white;
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(135deg, #101d38, #183b68 55%, #2367a6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
 }
 
-main {
-  width: 100%;
-  max-width: 760px;
-  text-align: center;
+.app {
+    width: min(960px, 100%);
+    background: rgba(255,255,255,.97);
+    border-radius: 25px;
+    padding: 34px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.28);
 }
 
-.panel {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 24px;
-  padding: 40px;
-  box-shadow: 0 24px 70px rgba(0,0,0,.22);
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
 }
 
-.hidden {
-  display: none !important;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-.symbol {
-  font-size: 46px;
-  margin-bottom: 12px;
+.logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: var(--navy);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 26px;
 }
 
 h1 {
-  font-size: 40px;
-  margin: 0 0 10px;
+    font-size: 27px;
+    margin: 0;
+    color: var(--navy);
 }
 
-.subtitle {
-  color: var(--muted);
-  margin-bottom: 28px;
-  line-height: 1.6;
+.sub {
+    color: var(--muted);
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.clockbox {
+    text-align: right;
+    color: var(--navy);
+}
+
+#clock {
+    font-size: 27px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+#date {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.panel {
+    max-width: 520px;
+    margin: 26px auto 8px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 23px;
+    color: var(--navy);
+    margin: 0 0 10px;
+}
+
+p {
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 input {
-  width: 100%;
-  max-width: 430px;
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  text-align: center;
+    width: 100%;
+    padding: 15px 16px;
+    border: 1px solid #d6deea;
+    border-radius: 12px;
+    font-size: 16px;
+    margin: 8px 0;
+    outline: none;
 }
 
-button {
-  cursor: pointer;
-  font-family: inherit;
-  transition: .2s;
+input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(40,120,229,.12);
 }
 
-button:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
+button, .tile {
+    border: 0;
+    border-radius: 13px;
+    padding: 15px 18px;
+    font-size: 16px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: .15s;
+}
+
+button:hover, .tile:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.03);
 }
 
 .primary {
-  display: block;
-  width: 100%;
-  max-width: 430px;
-  margin: 14px auto;
-  padding: 16px;
-  background: var(--blue);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-.error {
-  color: #ffd1d1;
-  min-height: 24px;
-}
-
-.choices {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  margin: 28px 0;
-}
-
-.tile {
-  background: white;
-  color: var(--navy);
-  border: none;
-  border-radius: 18px;
-  padding: 30px 15px;
-  min-height: 165px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.tile .ico {
-  font-size: 42px;
-}
-
-.tile strong {
-  font-size: 22px;
-}
-
-.tile span:last-child {
-  color: #607080;
-  font-size: 14px;
+    background: var(--blue);
+    color: white;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .secondary {
-  background: #e7edf4;
-  color: #18314b;
-  border: none;
-  border-radius: 10px;
-  padding: 13px 20px;
-  font-weight: bold;
-  margin: 8px;
+    background: #eaf1fb;
+    color: var(--navy);
+}
+
+.danger {
+    background: #fff0f0;
+    color: #a52d2d;
+}
+
+.error {
+    color: #bd2929;
+    min-height: 22px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.greeting {
+    text-align: center;
+    margin: 18px 0 24px;
+}
+
+.greeting h2 {
+    font-size: 29px;
+}
+
+.session {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 24px auto;
+    max-width: 700px;
+}
+
+.tile {
+    background: var(--light);
+    border: 1px solid #e5ebf4;
+    color: var(--navy);
+    min-height: 112px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.tile .emoji {
+    font-size: 29px;
+}
+
+.tile small {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.actions button {
+    font-size: 14px;
+    padding: 11px 15px;
 }
 
 footer {
-  color: #9fb2c5;
-  font-size: 12px;
-  margin-top: 20px;
+    text-align: center;
+    color: #8290a5;
+    font-size: 12px;
+    margin-top: 28px;
 }
 
-.admin-link {
-  position: fixed;
-  right: 15px;
-  bottom: 12px;
-  background: transparent;
-  border: none;
-  color: #9fb2c5;
-  font-size: 12px;
+.adminbox {
+    max-width: 480px;
+    margin: 24px auto;
 }
 
-.small-note {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
-  margin: 15px 0;
+.note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 12px;
 }
 
-@media(max-width:520px) {
-  .panel {
-    padding: 25px 18px;
-  }
+@media(max-width:620px) {
+    .app {
+        padding: 22px 18px;
+    }
 
-  .choices {
-    grid-template-columns: 1fr;
-  }
+    .clockbox {
+        display: none;
+    }
 
-  h1 {
-    font-size: 32px;
-  }
+    header {
+        justify-content: center;
+    }
+
+    .tiles {
+        gap: 10px;
+    }
+
+    .tile {
+        min-height: 100px;
+        padding: 12px 8px;
+    }
+
+    .greeting h2 {
+        font-size: 24px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<main>
+<main class="app">
 
-<!-- WACHTWOORDSCHERM -->
-<section class="panel" id="loginView">
+<header>
+    <div class="brand">
+        <div class="logo">🏠</div>
+        <div>
+            <h1>Gastportaal</h1>
+            <div class="sub">Welkom. Kies wat u wilt openen.</div>
+        </div>
+    </div>
 
-  <div class="symbol">👋</div>
-
-  <h1>Welkom!</h1>
-
-  <p class="subtitle">
-    Welkom in het gastaccount.<br>
-    Vul het wachtwoord in om verder te gaan.
-  </p>
-
-  <form id="loginForm">
-
-    <input
-      id="guestPassword"
-      type="password"
-      placeholder="Wachtwoord"
-      autocomplete="off"
-      required
-    >
-
-    <button class="primary" type="submit">
-      Ontgrendelen
-    </button>
-
-    <p class="error" id="loginError"></p>
-
-  </form>
-
-  <footer>Gastportaal</footer>
-
-</section>
+    <div class="clockbox">
+        <div id="clock">00:00:00</div>
+        <div id="date"></div>
+    </div>
+</header>
 
 
-<!-- KEUZESCHERM -->
-<section class="panel hidden" id="choicesView">
+<!-- INLOGSCHERM -->
 
-  <div class="symbol">🖥️</div>
+<section id="login" class="panel">
 
-  <h1>Gastportaal</h1>
+    <h2>Welkom!</h2>
 
-  <p class="subtitle">
-    Kies wat je wilt openen.
-  </p>
-
-  <div class="choices">
-
-    <button class="tile" id="googleButton" type="button">
-      <span class="ico">🌐</span>
-      <strong>Google</strong>
-      <span>Google openen</span>
-    </button>
-
-    <button class="tile" id="edgeButton" type="button">
-      <span class="ico">ⓔ</span>
-      <strong>Edge</strong>
-      <span>Internet openen</span>
-    </button>
-
-  </div>
-
-  <p class="small-note">
-    Het gastportaal blijft geopend in het oorspronkelijke tabblad.
-    Gebruik Ctrl + Shift + Tab om naar het vorige tabblad terug te gaan,
-    als Edge dit in de kioskmodus toestaat.
-  </p>
-
-  <button class="secondary" id="backButton" type="button">
-    ← Terug naar beginscherm
-  </button>
-
-  <footer>Gastportaal</footer>
-
-</section>
-
-
-<!-- BEHEERSCHERM -->
-<section class="panel hidden" id="adminView">
-
-  <div class="symbol">⚙️</div>
-
-  <h1>Beheer</h1>
-
-  <p class="subtitle">Wachtwoord wijzigen</p>
-
-  <form id="adminForm">
-
-    <input
-      id="adminPassword"
-      type="password"
-      placeholder="Beheerderswachtwoord"
-      required
-    >
-
-    <button class="primary" type="submit">
-      Verder
-    </button>
-
-    <p class="error" id="adminError"></p>
-
-  </form>
-
-  <div id="changeArea" class="hidden">
-
-    <p class="small-note">
-      Vul hieronder je nieuwe gastwachtwoord in.
+    <p>
+        Vul uw naam en het gastwachtwoord in om verder te gaan.
     </p>
 
     <input
-      id="newPassword"
-      type="password"
-      placeholder="Nieuw wachtwoord"
+        id="guestName"
+        type="text"
+        placeholder="Uw naam"
+        autocomplete="off"
+        maxlength="60"
     >
-
-    <br><br>
 
     <input
-      id="confirmPassword"
-      type="password"
-      placeholder="Wachtwoord herhalen"
+        id="guestPassword"
+        type="password"
+        placeholder="Gastwachtwoord"
+        autocomplete="current-password"
     >
 
-    <button class="primary" id="savePassword" type="button">
-      Wachtwoord opslaan
+    <button class="primary" onclick="login()">
+        Inloggen
     </button>
 
-    <p class="error" id="changeError"></p>
-
-  </div>
-
-  <button class="secondary" id="cancelAdmin" type="button">
-    Terug
-  </button>
-
-  <footer>Beheer gastportaal</footer>
+    <div id="loginError" class="error" role="alert"></div>
 
 </section>
 
-</main>
 
-<button class="admin-link" id="adminLink" type="button">
-  Beheer
-</button>
+<!-- HOOFDMENU -->
+
+<section id="home" class="hidden">
+
+    <div class="greeting">
+
+        <h2 id="hello">Hallo!</h2>
+
+        <div>Wat wilt u doen?</div>
+
+        <div class="session">
+            Deze sessie:
+            <span id="sessionTime">00:00:00</span>
+        </div>
+
+    </div>
+
+
+    <div class="tiles">
+
+        <a
+            class="tile"
+            href="https://www.google.nl/"
+            target="_blank"
+            rel="noopener"
+        >
+            <span class="emoji">🔎</span>
+            <span>Google</span>
+            <small>Zoeken op internet</small>
+        </a>
+
+
+        <a
+            class="tile"
+            href="https://www.msn.com/nl-nl"
+            target="_blank"
+            rel="noopener"
+        >
+            <span class="emoji">🌐</span>
+            <span>Edge</span>
+            <small>Startpagina openen</small>
+        </a>
+
+
+        <button class="tile" onclick="lockPortal()">
+            <span class="emoji">🔒</span>
+            <span>Vergrendelen</span>
+            <small>Terug naar het inlogscherm</small>
+        </button>
+
+    </div>
+
+
+    <div class="actions">
+
+        <button class="secondary" onclick="logout()">
+            ↩ Uitloggen
+        </button>
+
+        <button class="secondary" onclick="showAdmin()">
+            ⚙ Beheer
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- BEHEERMENU -->
+
+<section id="admin" class="hidden adminbox">
+
+    <h2>Beheer</h2>
+
+    <p>Wijzig het gastwachtwoord.</p>
+
+    <input
+        id="adminPassword"
+        type="password"
+        placeholder="Beheerderswachtwoord"
+    >
+
+    <input
+        id="newGuestPassword"
+        type="password"
+        placeholder="Nieuw gastwachtwoord"
+    >
+
+    <input
+        id="confirmGuestPassword"
+        type="password"
+        placeholder="Herhaal nieuw gastwachtwoord"
+    >
+
+    <button class="primary" onclick="changePassword()">
+        Wachtwoord wijzigen
+    </button>
+
+    <div id="adminMessage" class="error" role="status"></div>
+
+    <div class="actions">
+
+        <button class="secondary" onclick="backHome()">
+            ← Terug
+        </button>
+
+        <button class="danger" onclick="logout()">
+            Uitloggen
+        </button>
+
+    </div>
+
+    <div class="note">
+        Let op: dit is een eenvoudige toegangsdrempel.
+        Het beheerderswachtwoord staat in de broncode.
+    </div>
+
+</section>
+
+
+<footer>
+    Gastportaal • Gebruik na afloop de knop Uitloggen
+</footer>
+
+</main>
 
 
 <script>
@@ -346,187 +464,298 @@ footer {
 const DEFAULT_GUEST_PASSWORD = "Gast1234";
 const ADMIN_PASSWORD = "Beheer123";
 
-const GUEST_KEY = "gastportaal_guest_password_v1";
+const PASSWORD_KEY = "gastportaal_guest_password_v2";
+
+let sessionStarted = 0;
+let sessionInterval = null;
 
 
 // ===================================
-// SCHERMEN WISSELEN
+// WACHTWOORDEN
 // ===================================
 
-const $ = id => document.getElementById(id);
-
-function showView(id) {
-
-  ["loginView", "choicesView", "adminView"].forEach(view => {
-    $(view).classList.toggle("hidden", view !== id);
-  });
-
-  if (id === "loginView") {
-    $("guestPassword").focus();
-  }
+function currentGuestPassword() {
+    return localStorage.getItem(PASSWORD_KEY)
+        || DEFAULT_GUEST_PASSWORD;
 }
 
 
 // ===================================
-// WACHTWOORD CONTROLEREN
+// SCHERMEN
 // ===================================
 
-function getGuestPassword() {
+function show(id) {
 
-  return localStorage.getItem(GUEST_KEY)
-    || DEFAULT_GUEST_PASSWORD;
+    ["login", "home", "admin"].forEach(x => {
+
+        document
+            .getElementById(x)
+            .classList.toggle("hidden", x !== id);
+
+    });
 
 }
 
-$("loginForm").addEventListener("submit", function(e) {
 
-  e.preventDefault();
+// ===================================
+// INLOGGEN
+// ===================================
 
-  if ($("guestPassword").value === getGuestPassword()) {
+function login() {
 
-    $("loginError").textContent = "";
-    $("guestPassword").value = "";
+    const name =
+        document.getElementById("guestName").value.trim();
 
-    showView("choicesView");
+    const password =
+        document.getElementById("guestPassword").value;
 
-  } else {
+    const error =
+        document.getElementById("loginError");
 
-    $("loginError").textContent =
-      "Onjuist wachtwoord. Probeer het opnieuw.";
 
-    $("guestPassword").select();
+    if (!name) {
 
-  }
+        error.textContent = "Vul eerst uw naam in.";
 
-});
+        document.getElementById("guestName").focus();
+
+        return;
+    }
+
+
+    if (password !== currentGuestPassword()) {
+
+        error.textContent =
+            "Het gastwachtwoord is niet juist.";
+
+        return;
+    }
+
+
+    error.textContent = "";
+
+    document.getElementById("hello").textContent =
+        "Hallo, " + name + "!";
+
+    document.getElementById("guestPassword").value = "";
+
+
+    sessionStarted = Date.now();
+
+    show("home");
+
+    updateSession();
+
+    sessionInterval = setInterval(updateSession, 1000);
+
+}
 
 
 // ===================================
-// GOOGLE OPENEN
+// SESSIEDUUR
 // ===================================
 
-$("googleButton").addEventListener("click", function() {
+function updateSession() {
 
-  window.open(
-    "https://www.google.nl/",
-    "_blank"
-  );
+    if (!sessionStarted) return;
 
-});
+    const seconds =
+        Math.floor((Date.now() - sessionStarted) / 1000);
 
+    const h =
+        String(Math.floor(seconds / 3600)).padStart(2, "0");
 
-// ===================================
-// EDGE / INTERNET OPENEN
-// ===================================
+    const m =
+        String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
 
-$("edgeButton").addEventListener("click", function() {
+    const s =
+        String(seconds % 60).padStart(2, "0");
 
-  window.open(
-    "https://www.msn.com/nl-nl/",
-    "_blank"
-  );
+    document.getElementById("sessionTime").textContent =
+        h + ":" + m + ":" + s;
 
-});
+}
 
 
 // ===================================
-// TERUG NAAR BEGIN
+// UITLOGGEN EN VERGRENDELEN
 // ===================================
 
-$("backButton").addEventListener("click", function() {
+function clearSession() {
 
-  showView("loginView");
+    if (sessionInterval) {
+        clearInterval(sessionInterval);
+    }
 
-});
+    sessionInterval = null;
+    sessionStarted = 0;
 
+    document.getElementById("guestName").value = "";
+    document.getElementById("guestPassword").value = "";
 
-// ===================================
-// BEHEER OPENEN
-// ===================================
+    document.getElementById("sessionTime").textContent =
+        "00:00:00";
 
-$("adminLink").addEventListener("click", function() {
-
-  $("adminPassword").value = "";
-  $("adminError").textContent = "";
-  $("changeArea").classList.add("hidden");
-
-  showView("adminView");
-
-});
+}
 
 
-// ===================================
-// BEHEERDER CONTROLEREN
-// ===================================
+function logout() {
 
-$("adminForm").addEventListener("submit", function(e) {
+    clearSession();
 
-  e.preventDefault();
+    show("login");
 
-  if ($("adminPassword").value === ADMIN_PASSWORD) {
+    document.getElementById("loginError").textContent = "";
 
-    $("adminError").textContent = "";
-    $("changeArea").classList.remove("hidden");
+    document.getElementById("guestName").focus();
 
-    $("newPassword").focus();
+}
 
-  } else {
 
-    $("adminError").textContent =
-      "Onjuist beheerderswachtwoord.";
+function lockPortal() {
 
-  }
+    logout();
 
-});
+}
 
 
 // ===================================
-// NIEUW WACHTWOORD OPSLAAN
+// BEHEERMENU
 // ===================================
 
-$("savePassword").addEventListener("click", function() {
+function showAdmin() {
 
-  const password = $("newPassword").value;
-  const confirmation = $("confirmPassword").value;
+    document.getElementById("adminMessage").textContent = "";
 
-  if (password.length < 4) {
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("newGuestPassword").value = "";
+    document.getElementById("confirmGuestPassword").value = "";
 
-    $("changeError").textContent =
-      "Gebruik minimaal 4 tekens.";
+    show("admin");
 
-    return;
+}
 
-  }
 
-  if (password !== confirmation) {
+function backHome() {
 
-    $("changeError").textContent =
-      "De wachtwoorden komen niet overeen.";
+    show("home");
 
-    return;
-
-  }
-
-  localStorage.setItem(GUEST_KEY, password);
-
-  $("changeError").textContent =
-    "Het nieuwe wachtwoord is opgeslagen!";
-
-  $("newPassword").value = "";
-  $("confirmPassword").value = "";
-
-});
+}
 
 
 // ===================================
-// BEHEER TERUG
+// WACHTWOORD WIJZIGEN
 // ===================================
 
-$("cancelAdmin").addEventListener("click", function() {
+function changePassword() {
 
-  showView("loginView");
+    const admin =
+        document.getElementById("adminPassword").value;
 
-});
+    const p1 =
+        document.getElementById("newGuestPassword").value;
+
+    const p2 =
+        document.getElementById("confirmGuestPassword").value;
+
+    const msg =
+        document.getElementById("adminMessage");
+
+
+    if (admin !== ADMIN_PASSWORD) {
+
+        msg.textContent =
+            "Het beheerderswachtwoord is niet juist.";
+
+        return;
+    }
+
+
+    if (p1.length < 4) {
+
+        msg.textContent =
+            "Kies een gastwachtwoord van minimaal 4 tekens.";
+
+        return;
+    }
+
+
+    if (p1 !== p2) {
+
+        msg.textContent =
+            "De nieuwe wachtwoorden komen niet overeen.";
+
+        return;
+    }
+
+
+    localStorage.setItem(PASSWORD_KEY, p1);
+
+    msg.textContent =
+        "Het gastwachtwoord is gewijzigd.";
+
+
+    document.getElementById("adminPassword").value = "";
+    document.getElementById("newGuestPassword").value = "";
+    document.getElementById("confirmGuestPassword").value = "";
+
+}
+
+
+// ===================================
+// KLOK EN DATUM
+// ===================================
+
+function updateClock() {
+
+    const now = new Date();
+
+    document.getElementById("clock").textContent =
+        now.toLocaleTimeString("nl-NL");
+
+    document.getElementById("date").textContent =
+        now.toLocaleDateString("nl-NL", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+}
+
+updateClock();
+
+setInterval(updateClock, 1000);
+
+
+// ===================================
+// ENTER-TOETS
+// ===================================
+
+document
+    .getElementById("guestPassword")
+    .addEventListener("keydown", e => {
+
+        if (e.key === "Enter") {
+            login();
+        }
+
+    });
+
+
+document
+    .getElementById("guestName")
+    .addEventListener("keydown", e => {
+
+        if (e.key === "Enter") {
+
+            document
+                .getElementById("guestPassword")
+                .focus();
+
+        }
+
+    });
 
 </script>
 
